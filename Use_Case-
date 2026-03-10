@@ -1,0 +1,38 @@
+ID: UC-03
+Autonomous Unix-to-Android Data Transfer
+Actor: Data Scientist / Researcher
+Description: The user automates the retrieval of specific data files from a Unix-based workstation and sends them to a mobile communication app (WhatsApp) via a simple voice/text command.
+
+
+2. Flow of Events
+  2.1 Main Success Scenario (Happy Path)
+  1.	Trigger: Actor issues command: "Fetch the latest .csv results from the 'Data_Science' folder on the Unix machine and send them to my WhatsApp."
+  2.	Identification: ALIEN scans the directory /home/user/Data_Science/ and identifies the most recently modified file with a .csv extension.
+  3.	Extraction: The file is securely compressed (if necessary) and moved to the ALIEN Cloud buffer.
+  4.	Integration: ALIEN accesses the WhatsApp API/Web-hook or Mobile Agent to locate the user's personal chat or a designated contact.
+  5.	Delivery: The file is uploaded and sent as a document attachment.
+  6.	Confirmation: ALIEN notifies the user: "Success! 'Results_v2.csv' has been sent to your WhatsApp."
+ 
+  2.2 Alternative Flows
+    A1: No CSV Found
+      If no .csv files exist in the folder, ALIEN reports: "I found the folder, but there are no CSV files. Should I look for a different file type?"
+
+  2.3 Exception Flows
+    E1: Path Not Found
+      If the directory 'Data_Science' doesn't exist, ALIEN suggests similar folder names or asks for the absolute path.
+    E2: File Size Limit
+  	  If the CSV exceeds WhatsApp’s file size limit (e.g., >2GB), ALIEN offers to compress it into a .zip or provides a temporary secure download link instead.
+
+
+3. Requirements
+
+Type	                                    Description
+Preconditions	ALIEN Unix Agent is active; WhatsApp account is linked to ALIEN bridge.
+Postconditions	File is delivered;        Temporary buffer is cleared for security.
+Priority	                                Medium (High Convenience/Workflow Efficiency)
+
+
+4. Technical Logic
+•	Direct Hand-off: Bypasses third-party cloud storage (No Google Drive/Dropbox dependency).
+•	Time-Stamp Sorting: Uses Unix ls -t logic to determine the "latest" results programmatically.
+•	Security: Employs End-to-End Encryption (E2EE) during the transit from Unix to the mobile device.
