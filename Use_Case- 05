@@ -1,0 +1,27 @@
+UC-05: Autonomous GPU Cluster Scaling & Job Reporting
+Actor: ML Engineer / Researcher
+Description: The user monitors and scales remote GPU resources on a Unix cluster via conversational commands, receiving a visual performance report upon job completion.
+
+1. Flow of Events (Happy Path)
+  1.	Trigger: Actor issues command: "Spin up a 4-GPU node, run train_v3.py in the 'Models' folder, and ping me when the loss hits 0.1."
+  2.	Resource Allocation: ALIEN interfaces with the cluster manager (e.g., SLURM or Kubernetes) to allocate the requested GPU resources.
+  3.	Execution: The script is executed within a containerized environment (Docker/Singularity).
+  4.	Monitoring: ALIEN hooks into the stdout/logs, tracking the "loss" metric in real-time.
+  5.	Reporting: Once the threshold (0.1) is met, ALIEN generates a telemetry snapshot (TensorBoard/Weights & Biases link).
+  6.	Notification: ALIEN sends a summary to the user's mobile device: "Training reached target. Node de-provisioned to save costs."
+
+2. Alternative & Exception Flows
+	A1: Resource Unavailable: If the cluster is at capacity, ALIEN calculates the estimated wait time based on the queue and asks: "Cluster full. Should I queue this or look for an AWS Spot Instance?"
+  E1: Convergence Failure: If the loss plateaus or diverges (NaN), ALIEN kills the process to prevent wasted compute and alerts the user immediately.
+
+3. Requirements
+
+Type	                                         Description
+Preconditions	SSH keys configured;             SLURM/K8s API access enabled.
+Postconditions	Idle resources are terminated; Logs are archived to /logs/archive/.
+Priority	                                     High (Cost Management & Efficiency).
+
+4. Technical Logic
+  •	Metric Scraping: Uses grep or regex on live log streams to trigger event-based alerts.
+  •	Cost Optimization: Implements an "Auto-Kill" logic if specific hardware utilization falls below 10% for over 30 minutes.
+
