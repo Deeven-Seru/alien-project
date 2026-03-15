@@ -1,0 +1,37 @@
+ID:UC-02
+Vision-Based Remote Troubleshooting
+Actor: Non-Technical User (Parent/Client) or Remote Admin
+Description: ALIEN utilises vision-based perception to navigate a Graphical User Interface (GUI) autonomously, performing troubleshooting tasks or file organization without requiring the user to understand the OS hierarchy.
+
+2. Flow of Events
+
+  2.1 Main Success Scenario (Happy Path)
+    1.	Trigger: Actor issues a natural language request: "Help my mom clear her stuck print queue" or "Locate the 2024 tax PDF and put it on the desktop."
+    2.	Visual Perception: ALIEN captures a screen state of the target machine and identifies UI elements (icons, search bars, buttons) using its vision model.
+    3.	Navigation: System "clicks" the Start menu, searches for "Printers & Scanners," and navigates to the active queue.
+    4.	Action: ALIEN identifies the "Cancel All Documents" button and executes the click.
+    5.	Verification: System waits for the UI to update, confirming the queue is empty via visual feedback.
+    6.	Confirmation: ALIEN provides a simple status update: "All set! The print queue is cleared and I've moved the tax document to the center of the desktop."
+
+  2.2 Alternative Flows
+    A1: Item Not Found
+  	If the "2024 Tax" document isn't visible, ALIEN opens the file explorer and uses a system-wide search, reporting progress verbally: "I'm searching the whole computer for that file now..."
+  
+  2.3 Exception Flows
+    E1: UAC/Permission Pop-up
+    If a Windows User Account Control (UAC) prompt appears, ALIEN identifies the visual block and asks the local user: "I need you to click 'Yes' on the permission box on your screen so I can continue."
+    E2: UI Change/Unexpected App
+    If an unexpected pop-up (like an update notification) covers the screen, ALIEN recognizes the obstruction and closes it before resuming the task.
+
+3. Requirements
+
+  Type	                                          Description
+Preconditions	ALIEN Desktop Agent installed;   Screen recording/Control permissions granted.
+Postconditions	UI task completed;             User is returned to a clean desktop state.
+Priority	                                     High (Key for "Mass Market" adoption)
+
+
+4. Technical Logic
+•	Vision-Language Model (VLM): Processes raw pixels into semantic coordinates (e.g., "The 'X' button is at 800, 20").
+•	Autonomous GUI Interaction: Mimics human mouse and keyboard events based on visual reasoning rather than just backend API calls.
+•	Low-Latency Streaming: Ensures the AI "sees" changes in real-time to avoid clicking on outdated UI states.
