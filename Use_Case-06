@@ -1,0 +1,25 @@
+UC-06: Secure Contextual Retrieval (Local RAG-to-Mobile)
+Actor: Research Lead / Data Scientist
+
+Description: The user queries a massive local corpus of PDF papers or technical docs on their Unix workstation and receives a synthesized answer + the source page on their mobile device.
+
+1. Flow of Events (Happy Path)
+  1.	Trigger: Actor asks via voice: "What was our conclusion on the transformer latency tests from last October?"
+  2.	Vector Search: ALIEN performs a semantic search across the local vector database (ChromaDB/FAISS) hosted on the workstation.
+  3.	Synthesis: ALIEN passes the retrieved document chunks to a local LLM to synthesize a concise answer.
+  4.	Formatting: The answer is paired with a direct link or a cropped PDF snippet of the source page.
+  5.	Delivery: The synthesized summary is sent to the user's mobile app.
+
+2. Alternative & Exception Flows
+  A2: Ambiguous Query: If multiple documents provide conflicting conclusions, ALIEN presents both: "I found two results: one from Oct 12 and one from Oct 28. Which should I prioritize?"
+	E2: OCR Failure: If the source document is a low-quality scan, ALIEN notifies the user that text extraction is unreliable and sends the raw image instead.
+
+3. Requirements
+Type	                                    Description
+Preconditions	Local Vector DB is indexed; Local LLM (Ollama/vLLM) is running.
+Postconditions	                          Query history is logged for future fine-tuning.
+Priority	                                Medium (Knowledge Discovery).
+
+4. Technical Logic
+•	Privacy-First: All embedding and inference happen on the Unix workstation; only the final encrypted result is sent to the mobile bridge.
+•	Context Window Management: Employs "Recursive Character Text Splitting" to ensure the most relevant chunks are fed to the model without exceeding token limits.
