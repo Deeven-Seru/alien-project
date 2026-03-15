@@ -1,7 +1,7 @@
-##ID:UC-02
-##Vision-Based Remote Troubleshooting
-**Actor: Non-Technical User (Parent/Client) or Remote Admin
-**Description:** ALIEN utilises vision-based perception to navigate a Graphical User Interface (GUI) autonomously, performing troubleshooting tasks or file organization without requiring the user to understand the OS hierarchy.
+ID:UC-02
+Vision-Based Remote Troubleshooting
+Actor: Non-Technical User (Parent/Client) or Remote Admin
+Description: ALIEN utilises vision-based perception to navigate a Graphical User Interface (GUI) autonomously, performing troubleshooting tasks or file organization without requiring the user to understand the OS hierarchy.
 
 2. Flow of Events
 
